@@ -2,6 +2,7 @@ import logging
 import socket
 import threading
 import json
+import time
 
 from algorithm import ALGORITHM
 from stratums import StratumEthash, StratumKawpow
@@ -13,8 +14,8 @@ class Pool:
         self.algo = str(algo)
         self.hostname = str(hostname)
         self.port = int(port)
-        self.clients = dict()
-        self.server = None
+        self.__clients = dict()
+        self.__socket = None
         self.alive = False
         self.threadAccept = None
         self.stratum = None
@@ -27,14 +28,14 @@ class Pool:
     def is_alive(self) -> bool:
         return self.alive
 
-    def start(self):
+    def bind(self):
         self.alive = True
 
         logging.info(f'Open server {self.hostname}:{self.port} - {self.algo}')
 
-        self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server.bind((self.hostname, self.port))
-        self.server.listen(1)
+        self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.__socket.bind((self.hostname, self.port))
+        self.__socket.listen(1)
 
         self.threadAccept = threading.Thread(target=self.__accept, args=())
         self.threadAccept.start()
@@ -43,24 +44,36 @@ class Pool:
         pass
 
     def __accept(self):
-        __socket, addr = self.server.accept()
-        self.clients[addr[1]] = __socket
-        logging.info(f'New client[{addr[1]}] connected! - Total clients {len(self.clients)}')
+        sock, addr = self.__socket.accept()
+        self.__clients[addr[1]] = sock
+        logging.info(f'New client[{addr[1]}] connected! - Total clients {len(self.__clients)}')
+
+        thread_loop = threading.Thread(target=self.__on_client,
+                                       args=(addr[1], sock))
+        thread_loop.start()
 
         self.threadAccept = threading.Thread(target=self.__accept, args=())
         self.threadAccept.start()
 
-    def remove_client(self, fd: int):
-        logging.warning(f'Remove client {fd}')
-        del self.clients[fd]
+    def remove_client(self, addr: int):
+        logging.warning(f'Remove client {addr}')
+        if addr in self.__clients:
+            del self.__clients[addr]
 
-    def on_receive(self):
-        for fd, __socket in self.clients.items():
+    def process(self):
+        while self.is_alive() is True:
             try:
-                __socket.settimeout(0.1)
-                raw = __socket.recv(2040)
+                time.sleep(0.1)
+            except KeyboardInterrupt:
+                self.alive = False
+
+    def __on_client(self, addr, sock):
+        while self.is_alive() is True:
+            try:
+                sock.settimeout(0.1)
+                raw = sock.recv(2040)
                 if not raw:
-                    self.remove_client(fd)
+                    self.remove_client(addr)
                     continue
                 packets = raw.decode("utf-8").split('\n')
                 if len(packets):
@@ -68,11 +81,14 @@ class Pool:
                         if len(packet):
                             data = json.loads(packet)
                             logging.info(f'recv <= {data}')
-                            self.stratum.on_message(fd, socket, data)
+                            self.stratum.on_message(sock, data)
             except TimeoutError:
                 pass
+            except socket.timeout:
+                pass
             except ConnectionAbortedError:
-                self.remove_client(fd)
-            except Exception as err:
-                logging.error(err)
-                self.remove_client(fd)
+                self.remove_client(addr)
+                return
+            except Exception:
+                self.remove_client(addr)
+                return

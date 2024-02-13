@@ -1,4 +1,5 @@
 import logging
+import socket
 
 
 class Stratum:
@@ -12,9 +13,12 @@ class Stratum:
             logging.debug(f'send => {msg_print}')
             if '\n' not in msg:
                 msg = f'{msg}\n'
-            __socket.settimeout(0.1)
+            __socket.settimeout(0.5)
             __socket.sendall(bytes(msg, encoding="utf-8"))
         except TimeoutError:
+            logging.warning(f'Skipped send timeout!')
+        except socket.timeout:
+            logging.warning(f'Skipped send timeout!')
             pass
         except Exception as error:
             logging.error(f'{error}.')

@@ -1,7 +1,6 @@
 import sys
 import argparse
 import logging
-import time
 
 
 from algorithm import is_valid_algorithm
@@ -28,7 +27,7 @@ parser.add_argument('--port',
 parser.add_argument('--algo',
                     default='ethash',
                     type=str,
-                    help="[ethash]")
+                    help="[ethash, kawpow]")
 
 args = parser.parse_args()
 
@@ -37,7 +36,5 @@ if is_valid_algorithm(args.algo) is False:
     sys.exit(1)
 
 pool = Pool(args.algo, args.host, int(args.port))
-pool.start()
-while pool.is_alive() is True:
-    pool.on_receive()
-    time.sleep(0.1)
+pool.bind()
+pool.process()
