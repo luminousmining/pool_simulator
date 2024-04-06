@@ -57,7 +57,7 @@ class StratumKawpow(Stratum):
 
         self.__mining_notify(sock)
 
-    def __on_mining_submit(self, __socket, request_id: dict, params: list):
+    def __on_mining_submit(self, __socket, request_id: int, params: list):
         logging.info(f'Nonce: {params}')
         body = '{"id":-1,"result":true,"error":null}'
         body.replace('-1', str(request_id))

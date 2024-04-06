@@ -5,7 +5,7 @@ import json
 import time
 
 from algorithm import ALGORITHM
-from stratums import StratumEthash, StratumKawpow
+from stratums import StratumEthash, StratumKawpow, StratumBlake3
 
 
 class Pool:
@@ -24,6 +24,8 @@ class Pool:
             self.stratum = StratumEthash()
         elif algo == ALGORITHM.KAWPOW:
             self.stratum = StratumKawpow()
+        elif algo == ALGORITHM.BLAKE3:
+            self.stratum = StratumBlake3()
 
     def is_alive(self) -> bool:
         return self.alive
@@ -74,7 +76,7 @@ class Pool:
                 raw = sock.recv(2040)
                 if not raw:
                     self.remove_client(addr)
-                    continue
+                    return
                 packets = raw.decode("utf-8").split('\n')
                 if len(packets):
                     for packet in packets:
