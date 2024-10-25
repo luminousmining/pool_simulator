@@ -3,10 +3,10 @@ import logging
 from stratums import Stratum
 
 
-class StratumKawpow(Stratum):
+class StratumMeowpow(Stratum):
 
     def __init__(self):
-        super(StratumKawpow, self).__init__()
+        super(StratumMeowpow, self).__init__()
 
     def on_message(self, sock, data: dict):
         if 'method' in data:
@@ -31,10 +31,11 @@ class StratumKawpow(Stratum):
             logging.error(f'Unknow method [{method}][{params}]')
 
     def __on_mining_subscribe(self, sock, request_id):
-        extra_nonce = 'c797'
+        weird = '0HN7JVA7GAKU9'
+        extra_nonce = '8071'
         body = '{' \
                f'"id":{request_id}, ' \
-               f'"result":[null, "{extra_nonce}"],' \
+               f'"result":["{weird}", "{extra_nonce}"],' \
                f'"error":null' \
                '}'
         self.send(sock, body)
@@ -47,14 +48,6 @@ class StratumKawpow(Stratum):
                '}'
         self.send(sock, body)
 
-        target = '00000004c5adf9601f294e237e477a16da83737a977a9898ed5f5fe6ad94fdd8'
-        body = '{' \
-               '"id":null,' \
-               '"method":"mining.set_target",' \
-               f'"params":["{target}"]' \
-               '}'
-        self.send(sock, body)
-
         self.__mining_notify(sock)
 
     def __on_mining_submit(self, __socket, request_id: int, params: list):
@@ -64,13 +57,13 @@ class StratumKawpow(Stratum):
         self.send(__socket, body)
 
     def __mining_notify(self, sock):
-        params = '"121c",' \
-                 '"ac9591f269daea1814735388e44c1cd14c991bbbbf387fbc6d1d079d7eeec1bf",' \
-                 '"db767d7b81c87067d9d8bf2347f783b7bbb367d345a33f3e5fd9c76e0d1b2156",' \
-                 '"00000004c5adf9601f294e237e477a16da83737a977a9898ed5f5fe6ad94fdd8",' \
+        params = '"00001058",' \
+                 '"44cf248a77ce1623d4fd833ec13ceab83d40591fb9dd7cf7ec28d08f298ba709",' \
+                 '"cfa3e37c459ebd9b4138bd2141a52d89f6f8f671ecf91456f5a29176eb132fc0",' \
+                 '"0000000500000000000000000000000000000000000000000000000000000000",' \
                  'true,' \
-                 '2523642,' \
-                 '"1a592935"'
+                 '1118706,' \
+                 '"1c014de3"'
         body = '{' \
                '"id": null, '\
                '"method": "mining.notify", '\

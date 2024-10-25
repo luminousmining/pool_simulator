@@ -27,7 +27,7 @@ parser.add_argument('--port',
 parser.add_argument('--algo',
                     default='ethash',
                     type=str,
-                    help="[ethash, kawpow]")
+                    help="[ethash, kawpow, meowpow]")
 
 args = parser.parse_args()
 

@@ -5,7 +5,7 @@ import json
 import time
 
 from algorithm import ALGORITHM
-from stratums import StratumEthash, StratumKawpow, StratumBlake3
+from stratums import StratumEthash, StratumKawpow, StratumBlake3, StratumMeowpow
 
 
 class Pool:
@@ -26,6 +26,8 @@ class Pool:
             self.stratum = StratumKawpow()
         elif algo == ALGORITHM.BLAKE3:
             self.stratum = StratumBlake3()
+        elif algo == ALGORITHM.MEOWPOW:
+            self.stratum = StratumMeowpow()
 
     def is_alive(self) -> bool:
         return self.alive
