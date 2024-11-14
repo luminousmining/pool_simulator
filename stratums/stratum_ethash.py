@@ -31,7 +31,7 @@ class StratumEthash(Stratum):
             logging.error(f'Unknow method [{method}][{params}]')
 
     def __on_mining_subscribe(self, sock, request_id):
-        extra_nonce = '0197'
+        extra_nonce = ''
         body = '{'\
                  f'"id":{request_id}, ' \
                  f'"result":[["mining.notify","1405ba371b0d0e4526961935bd5dbeee","EthereumStratum/1.0.0"],' \

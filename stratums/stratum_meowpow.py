@@ -50,11 +50,11 @@ class StratumMeowpow(Stratum):
 
         self.__mining_notify(sock)
 
-    def __on_mining_submit(self, __socket, request_id: int, params: list):
+    def __on_mining_submit(self, sock, request_id: int, params: list):
         logging.info(f'Nonce: {params}')
         body = '{"id":-1,"result":true,"error":null}'
         body = body.replace('-1', str(request_id))
-        self.send(__socket, body)
+        self.send(sock, body)
 
     def __mining_notify(self, sock):
         params = '"00001058",' \

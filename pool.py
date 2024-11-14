@@ -5,7 +5,11 @@ import json
 import time
 
 from algorithm import ALGORITHM
-from stratums import StratumEthash, StratumKawpow, StratumBlake3, StratumMeowpow
+from stratums import (StratumSmartMining,
+                      StratumEthash,
+                      StratumKawpow,
+                      StratumBlake3,
+                      StratumMeowpow)
 
 
 class Pool:
@@ -20,7 +24,9 @@ class Pool:
         self.threadAccept = None
         self.stratum = None
 
-        if algo == ALGORITHM.ETHASH:
+        if algo == ALGORITHM.SMART_MINING:
+            self.stratum = StratumSmartMining()
+        elif algo == ALGORITHM.ETHASH:
             self.stratum = StratumEthash()
         elif algo == ALGORITHM.KAWPOW:
             self.stratum = StratumKawpow()
@@ -59,8 +65,8 @@ class Pool:
         self.threadAccept = threading.Thread(target=self.__accept, args=())
         self.threadAccept.start()
 
-    def remove_client(self, addr: int):
-        logging.warning(f'Remove client {addr}')
+    def remove_client(self, by: str, addr: int):
+        logging.warning(f'Remove client {addr} - {by}')
         if addr in self.__clients:
             del self.__clients[addr]
 
@@ -77,7 +83,7 @@ class Pool:
                 sock.settimeout(0.1)
                 raw = sock.recv(2040)
                 if not raw:
-                    self.remove_client(addr)
+                    self.remove_client('packet is empty', addr)
                     return
                 packets = raw.decode("utf-8").split('\n')
                 if len(packets):
@@ -91,8 +97,8 @@ class Pool:
             except socket.timeout:
                 pass
             except ConnectionAbortedError:
-                self.remove_client(addr)
+                self.remove_client('ConnectionAbortedError', addr)
                 return
-            except Exception:
-                self.remove_client(addr)
+            except Exception as e:
+                self.remove_client(f'Exception[{e}]', addr)
                 return

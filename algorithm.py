@@ -1,4 +1,5 @@
 class ALGORITHM:
+    SMART_MINING = 'smart_mining'
     ETHASH = 'ethash'
     KAWPOW = 'kawpow'
     MEOWPOW = 'meowpow'
@@ -6,7 +7,9 @@ class ALGORITHM:
 
 
 def is_valid_algorithm(algo: str) -> bool:
-    if algo == ALGORITHM.ETHASH:
+    if algo == ALGORITHM.SMART_MINING:
+        return True
+    elif algo == ALGORITHM.ETHASH:
         return True
     elif algo == ALGORITHM.KAWPOW:
         return True
