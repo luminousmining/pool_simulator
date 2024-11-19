@@ -3,6 +3,7 @@ class ALGORITHM:
     ETHASH = 'ethash'
     KAWPOW = 'kawpow'
     MEOWPOW = 'meowpow'
+    QUAIPOW = 'quaipow'
     BLAKE3 = 'blake3'
 
 
@@ -14,6 +15,8 @@ def is_valid_algorithm(algo: str) -> bool:
     elif algo == ALGORITHM.KAWPOW:
         return True
     elif algo == ALGORITHM.MEOWPOW:
+        return True
+    elif algo == ALGORITHM.QUAIPOW:
         return True
     elif algo == ALGORITHM.BLAKE3:
         return True

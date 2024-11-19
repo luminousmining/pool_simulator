@@ -1,11 +1,12 @@
 import logging
 import socket
 
+from stratums import STRATUM_VERSION
 
 class Stratum:
 
     def __init__(self):
-        pass
+        self.stratum_version = STRATUM_VERSION.STRATUM
 
     def send(self, __socket, msg) -> bool:
         try:

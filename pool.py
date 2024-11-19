@@ -9,7 +9,8 @@ from stratums import (StratumSmartMining,
                       StratumEthash,
                       StratumKawpow,
                       StratumBlake3,
-                      StratumMeowpow)
+                      StratumMeowpow,
+                      StratumQuaipow)
 
 
 class Pool:
@@ -30,10 +31,12 @@ class Pool:
             self.stratum = StratumEthash()
         elif algo == ALGORITHM.KAWPOW:
             self.stratum = StratumKawpow()
-        elif algo == ALGORITHM.BLAKE3:
-            self.stratum = StratumBlake3()
         elif algo == ALGORITHM.MEOWPOW:
             self.stratum = StratumMeowpow()
+        elif algo == ALGORITHM.QUAIPOW:
+            self.stratum = StratumQuaipow()
+        elif algo == ALGORITHM.BLAKE3:
+            self.stratum = StratumBlake3()
 
     def is_alive(self) -> bool:
         return self.alive
