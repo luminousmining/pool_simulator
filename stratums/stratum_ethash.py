@@ -67,8 +67,8 @@ class StratumEthash(Stratum):
                 '}'
         self.send(sock, body)
 
-    def __on_mining_submit(self, sock, request_id: dict, params: list):
+    def __on_mining_submit(self, sock, request_id: int, params: list):
         logging.info(f'Nonce: {params}')
         body = '{"id":-1,"result":true,"error":null}'
-        body.replace('-1', str(request_id))
+        body = body.replace('-1', str(request_id))
         self.send(sock, body)

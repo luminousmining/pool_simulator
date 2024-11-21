@@ -76,6 +76,7 @@ class StratumQuaipow(Stratum):
         logging.info(f'Nonce: {params}')
         body = '{"id":-1,"result":true,"error":null}'
         body = body.replace('-1', str(request_id))
+        self.send(sock, body)
 
     def __mining_set(self, sock):
         params = '{' \

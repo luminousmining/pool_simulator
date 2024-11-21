@@ -29,7 +29,7 @@ class StratumSmartMining(Stratum):
 
     def __on_submit(self, sock, request_id):
         body = '{"id":-1,"result":true,"error":null}'
-        body.replace('-1', str(request_id))
+        body = body.replace('-1', str(request_id))
         self.send(sock, body)
 
     def __on_mining_subscribe(self, sock, request_id) -> None:
