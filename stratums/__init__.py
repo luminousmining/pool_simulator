@@ -6,3 +6,4 @@ from stratums.stratum_blake3 import StratumBlake3
 from stratums.stratum_meowpow import StratumMeowpow
 from stratums.stratum_smart_mining import StratumSmartMining
 from stratums.stratum_quaipow import StratumQuaipow
+from stratums.stratum_autolykos_v2 import StratumAutolykosv2

@@ -10,12 +10,13 @@ from stratums import (StratumSmartMining,
                       StratumKawpow,
                       StratumBlake3,
                       StratumMeowpow,
-                      StratumQuaipow)
+                      StratumQuaipow,
+                      StratumAutolykosv2)
 
 
 class Pool:
 
-    def __init__(self, algo: str, hostname: str, port: int):
+    def __init__(self, algo: str, hostname: str, port: int) -> None:
         self.algo = str(algo)
         self.hostname = str(hostname)
         self.port = int(port)
@@ -37,11 +38,13 @@ class Pool:
             self.stratum = StratumQuaipow()
         elif algo == ALGORITHM.BLAKE3:
             self.stratum = StratumBlake3()
+        elif algo == ALGORITHM.AUTOLYKOS_V2:
+            self.stratum = StratumAutolykosv2()
 
     def is_alive(self) -> bool:
         return self.alive
 
-    def bind(self):
+    def bind(self) -> None:
         self.alive = True
 
         logging.info(f'Open server {self.hostname}:{self.port} - {self.algo}')
@@ -53,10 +56,7 @@ class Pool:
         self.threadAccept = threading.Thread(target=self.__accept, args=())
         self.threadAccept.start()
 
-    def stop(self):
-        pass
-
-    def __accept(self):
+    def __accept(self) -> None:
         sock, addr = self.__socket.accept()
         self.__clients[addr[1]] = sock
         logging.info(f'New client[{addr[1]}] connected! - Total clients {len(self.__clients)}')
@@ -68,22 +68,22 @@ class Pool:
         self.threadAccept = threading.Thread(target=self.__accept, args=())
         self.threadAccept.start()
 
-    def remove_client(self, by: str, addr: int):
+    def remove_client(self, by: str, addr: int) -> None:
         logging.warning(f'Remove client {addr} - {by}')
         if addr in self.__clients:
             del self.__clients[addr]
 
-    def process(self):
+    def process(self) -> None:
         while self.is_alive() is True:
             try:
                 time.sleep(0.1)
             except KeyboardInterrupt:
                 self.alive = False
 
-    def __on_client(self, addr, sock):
+    def __on_client(self, addr, sock) -> None:
         while self.is_alive() is True:
             try:
-                sock.settimeout(0.1)
+                sock.settimeout(0.5)
                 raw = sock.recv(2040)
                 if not raw:
                     self.remove_client('packet is empty', addr)
