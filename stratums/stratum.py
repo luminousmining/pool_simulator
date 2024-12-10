@@ -3,6 +3,7 @@ import socket
 
 from stratums import STRATUM_VERSION
 
+
 class Stratum:
 
     def __init__(self):
