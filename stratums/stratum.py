@@ -33,12 +33,9 @@ class Stratum:
             except (json.JSONDecodeError, AttributeError):
                 pass
         except TimeoutError:
-            logging.warning(f'Skipped send timeout!')
-        except socket.timeout:
-            logging.warning(f'Skipped send timeout!')
-            pass
-        except Exception as error:
-            logging.error(f'{error}.')
+            logging.warning('Skipped send timeout!')
+        except Exception as exc:
+            logging.error(f'{exc}.')
             return False
 
         return True

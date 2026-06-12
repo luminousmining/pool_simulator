@@ -22,10 +22,10 @@ class Pool:
         self.algo = str(algo)
         self.hostname = str(hostname)
         self.port = int(port)
-        self.__clients = dict()
+        self.__clients = {}
         self.__socket = None
         self.alive = False
-        self.threadAccept = None
+        self.thread_accept = None
         self.stratum = None
 
         if algo == ALGORITHM.SMART_MINING:
@@ -57,8 +57,8 @@ class Pool:
         self.__socket.bind((self.hostname, self.port))
         self.__socket.listen(1)
 
-        self.threadAccept = threading.Thread(target=self.__accept, args=())
-        self.threadAccept.start()
+        self.thread_accept = threading.Thread(target=self.__accept, args=())
+        self.thread_accept.start()
 
     def __accept(self) -> None:
         try:
@@ -74,8 +74,8 @@ class Pool:
                                        args=(addr[1], sock))
         thread_loop.start()
 
-        self.threadAccept = threading.Thread(target=self.__accept, args=())
-        self.threadAccept.start()
+        self.thread_accept = threading.Thread(target=self.__accept, args=())
+        self.thread_accept.start()
 
     def remove_client(self, by: str, addr: int) -> None:
         logging.warning(f'Remove client {addr} - {by}')
@@ -112,11 +112,9 @@ class Pool:
                             self.stratum.on_message(sock, data)
             except TimeoutError:
                 pass
-            except socket.timeout:
-                pass
             except ConnectionAbortedError:
                 self.remove_client('ConnectionAbortedError', addr)
                 return
-            except Exception as e:
-                self.remove_client(f'Exception[{e}]', addr)
+            except Exception as exc:
+                self.remove_client(f'Exception[{exc}]', addr)
                 return

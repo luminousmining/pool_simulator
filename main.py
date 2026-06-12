@@ -7,12 +7,12 @@ from utils import ALGORITHM
 from core import Pool
 
 
-log_level = logging.DEBUG
+LOG_LEVEL = logging.DEBUG
 logging.basicConfig(
     format='[%(levelname)s][%(asctime)s]: %(message)s',
     datefmt='%m/%d/%Y %I:%M:%S %p',
     encoding='utf-8',
-    level=log_level)
+    level=LOG_LEVEL)
 
 
 parser = argparse.ArgumentParser(description='')

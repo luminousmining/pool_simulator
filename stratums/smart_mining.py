@@ -5,17 +5,13 @@ from stratums import Stratum
 
 class StratumSmartMining(Stratum):
 
-    def __init__(self):
-        super(StratumSmartMining, self).__init__()
-        self.__current_algorithm = str()
-
     def on_message(self, sock, data: dict) -> None:
         if 'method' in data:
             self.__on_method(sock, data)
         else:
             self.__on_response(sock, data)
 
-    def __on_response(self, sock, data: dict) -> None:
+    def __on_response(self, _sock, _data: dict) -> None:
         logging.info('In response')
 
     def __on_method(self, sock, data: dict) -> None:
@@ -41,8 +37,6 @@ class StratumSmartMining(Stratum):
         self.__send_ethash_job(sock)
 
     def __set_algo_ethash(self, sock):
-        self.__current_algorithm = 'ethash'
-
         # mining.set_algo
         body = '{'\
                '"id":1,'\

@@ -1,4 +1,4 @@
-class ALGORITHM:
+class ALGORITHM:  # pylint: disable=invalid-name
     SMART_MINING = 'smart_mining'
     ETHASH = 'ethash'
     KAWPOW = 'kawpow'

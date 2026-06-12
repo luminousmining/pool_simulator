@@ -1,3 +1,4 @@
+# pylint: disable=line-too-long
 import logging
 
 from stratums import Stratum
@@ -5,16 +6,13 @@ from stratums import Stratum
 
 class StratumBlake3(Stratum):
 
-    def __init__(self):
-        super(StratumBlake3, self).__init__()
-
     def on_message(self, sock, data: dict):
         if 'method' in data:
             self.__on_method(sock, data)
         else:
             self.__on_response(sock, data)
 
-    def __on_response(self, sock, data: dict):
+    def __on_response(self, _sock, data: dict):
         logging.info(f'response => {data}')
 
     def __on_method(self, sock, data: dict):

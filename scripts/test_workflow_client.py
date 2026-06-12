@@ -13,8 +13,8 @@ def wait_for_server(timeout: int) -> None:
     deadline = time.monotonic() + timeout
     while time.monotonic() < deadline:
         try:
-            s = socket.create_connection((HOST, PORT), timeout=1)
-            s.close()
+            sock = socket.create_connection((HOST, PORT), timeout=1)
+            sock.close()
             return
         except OSError:
             time.sleep(0.2)

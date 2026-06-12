@@ -6,16 +6,13 @@ from stratums import Stratum
 
 class StratumAutolykosv2(Stratum):
 
-    def __init__(self):
-        super(StratumAutolykosv2, self).__init__()
-
     def on_message(self, sock, data: dict):
         if 'method' in data:
             self.__on_method(sock, data)
         else:
             self.__on_response(sock, data)
 
-    def __on_response(self, sock, data: dict):
+    def __on_response(self, _sock, data: dict):
         logging.info(f'response => {data}')
 
     def __on_method(self, sock, data: dict):
@@ -36,7 +33,7 @@ class StratumAutolykosv2(Stratum):
         size = 6
 
         key_id = f'"id":{request_id}'
-        if type(request_id) is str:
+        if isinstance(request_id, str):
             key_id = f'"id":"{request_id}"'
 
         body = '{' \
@@ -48,7 +45,7 @@ class StratumAutolykosv2(Stratum):
 
     def __on_mining_authorize(self, sock, request_id: Union[int, str]):
         key_id = f'"id":{request_id}'
-        if type(request_id) is str:
+        if isinstance(request_id, str):
             key_id = f'"id":"{request_id}"'
 
         body = '{' \
@@ -84,7 +81,7 @@ class StratumAutolykosv2(Stratum):
 
     def __on_mining_submit(self, sock, request_id: Union[int, str], params: list):
         key_id = request_id
-        if type(request_id) is str:
+        if isinstance(request_id, str):
             key_id = f'"{request_id}"'
 
         logging.info(f'Nonce: {params}')

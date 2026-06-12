@@ -6,16 +6,13 @@ from stratums import STRATUM_VERSION
 
 class StratumQuaipow(Stratum):
 
-    def __init__(self):
-        super(StratumQuaipow, self).__init__()
-
     def on_message(self, sock, data: dict) -> None:
         if 'method' in data:
             self.__on_method(sock, data)
         else:
             self.__on_response(sock, data)
 
-    def __on_response(self, sock, data: dict) -> None:
+    def __on_response(self, _sock, data: dict) -> None:
         logging.info(f'response => {data}')
 
     def __on_method(self, sock, data: dict) -> None:

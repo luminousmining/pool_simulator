@@ -1,0 +1,23 @@
+[MAIN]
+py-version = 3.11
+
+[MESSAGES CONTROL]
+disable =
+    missing-module-docstring,
+    missing-class-docstring,
+    missing-function-docstring,
+    broad-exception-caught,
+    logging-fstring-interpolation,
+    duplicate-code,
+    cyclic-import,
+    too-few-public-methods,
+    too-many-instance-attributes,
+    too-many-arguments,
+    too-many-positional-arguments,
+    too-many-nested-blocks
+
+[FORMAT]
+max-line-length = 120
+
+[BASIC]
+good-names = i,j,k,_
