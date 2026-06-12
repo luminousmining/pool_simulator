@@ -11,12 +11,14 @@ from stratums import (StratumSmartMining,
                       StratumBlake3,
                       StratumMeowpow,
                       StratumQuaipow,
-                      StratumAutolykosv2)
+                      StratumAutolykosv2,
+                      StratumWorkflow)
 
 
 class Pool:
 
-    def __init__(self, algo: str, hostname: str, port: int) -> None:
+    def __init__(self, algo: str, hostname: str, port: int,
+                 workflow_file: str = None, workflow_name: str = None) -> None:
         self.algo = str(algo)
         self.hostname = str(hostname)
         self.port = int(port)
@@ -40,6 +42,8 @@ class Pool:
             self.stratum = StratumBlake3()
         elif algo == ALGORITHM.AUTOLYKOS_V2:
             self.stratum = StratumAutolykosv2()
+        elif algo == ALGORITHM.WORKFLOW:
+            self.stratum = StratumWorkflow(workflow_name, workflow_file)
 
     def is_alive(self) -> bool:
         return self.alive
@@ -61,6 +65,8 @@ class Pool:
         self.__clients[addr[1]] = sock
         logging.info(f'New client[{addr[1]}] connected! - Total clients {len(self.__clients)}')
 
+        self.stratum.on_connect(sock)
+
         thread_loop = threading.Thread(target=self.__on_client,
                                        args=(addr[1], sock))
         thread_loop.start()
@@ -71,6 +77,7 @@ class Pool:
     def remove_client(self, by: str, addr: int) -> None:
         logging.warning(f'Remove client {addr} - {by}')
         if addr in self.__clients:
+            self.stratum.on_disconnect(self.__clients[addr])
             del self.__clients[addr]
 
     def process(self) -> None:

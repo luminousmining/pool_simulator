@@ -6,6 +6,7 @@ class ALGORITHM:
     QUAIPOW = 'quaipow'
     BLAKE3 = 'blake3'
     AUTOLYKOS_V2 = 'autolykos_v2'
+    WORKFLOW = 'workflow'
 
 
 def is_valid_algorithm(algo: str) -> bool:
@@ -22,5 +23,7 @@ def is_valid_algorithm(algo: str) -> bool:
     elif algo == ALGORITHM.BLAKE3:
         return True
     elif algo == ALGORITHM.AUTOLYKOS_V2:
+        return True
+    elif algo == ALGORITHM.WORKFLOW:
         return True
     return False

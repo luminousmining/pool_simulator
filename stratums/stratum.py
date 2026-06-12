@@ -9,6 +9,12 @@ class Stratum:
     def __init__(self):
         self.stratum_version = STRATUM_VERSION.STRATUM
 
+    def on_connect(self, sock) -> None:
+        pass
+
+    def on_disconnect(self, sock) -> None:
+        pass
+
     def send(self, __socket, msg) -> bool:
         try:
             msg_print = msg.replace("\n", "")

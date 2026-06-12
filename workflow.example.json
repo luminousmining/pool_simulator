@@ -1,0 +1,23 @@
+{
+    "workflow_sample_1": {
+        "description": "Sample workflow for demonstration purposes",
+        "steps": [
+            {
+                "name": "step_1",
+                "id": 1,
+                "body": {
+                    "method": "mining.notify",
+                    "params": ["job_001", "aabbcc"]
+                }
+            },
+            {
+                "name": "step_2",
+                "id": 2,
+                "body": {
+                    "method": "mining.set_difficulty",
+                    "params": [1.0]
+                }
+            }
+        ]
+    }
+}
