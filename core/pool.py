@@ -61,7 +61,10 @@ class Pool:
         self.threadAccept.start()
 
     def __accept(self) -> None:
-        sock, addr = self.__socket.accept()
+        try:
+            sock, addr = self.__socket.accept()
+        except OSError:
+            return
         self.__clients[addr[1]] = sock
         logging.info(f'New client[{addr[1]}] connected! - Total clients {len(self.__clients)}')
 
