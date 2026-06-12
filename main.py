@@ -3,7 +3,7 @@ import argparse
 import logging
 
 
-from utils import is_valid_algorithm
+from utils import ALGORITHM
 from core import Pool
 
 
@@ -21,13 +21,13 @@ parser.add_argument('--host',
                     default='127.0.0.1',
                     help="")
 parser.add_argument('--port',
-                    type=str,
-                    default='7878',
+                    type=int,
+                    default=7878,
                     help="")
 parser.add_argument('--algo',
                     default='ethash',
-                    type=str,
-                    help="[smart_mining, ethash, kawpow, meowpow, quaipow, blake3, autolykos_v2, workflow]")
+                    choices=ALGORITHM.values(),
+                    help="Mining algorithm to simulate")
 parser.add_argument('--workflow-file',
                     type=str,
                     default=None,
@@ -39,16 +39,12 @@ parser.add_argument('--workflow-name',
 
 args = parser.parse_args()
 
-if is_valid_algorithm(args.algo) is False:
-    logging.error(f'Algorithm unsupported {args.algo}')
-    sys.exit(1)
-
 if args.algo == 'workflow':
     if args.workflow_file is None or args.workflow_name is None:
         logging.error('--workflow-file and --workflow-name are required when --algo workflow')
         sys.exit(1)
 
-pool = Pool(args.algo, args.host, int(args.port),
+pool = Pool(args.algo, args.host, args.port,
             workflow_file=args.workflow_file,
             workflow_name=args.workflow_name)
 pool.bind()
