@@ -94,9 +94,7 @@ A single file can contain multiple named workflows. The `--workflow-name` flag s
 ### Running a workflow
 
 ```bash
-python main.py --algo workflow \
-    --workflow-file workflow_example.json \
-    --workflow-name workflow_sample_1
+python main.py --algo workflow --workflow-file workflow_example.json --workflow-name workflow_sample_1
 ```
 
 A ready-to-use example is provided in [`workflow_example.json`](workflow_example.json).

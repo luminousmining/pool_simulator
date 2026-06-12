@@ -1,0 +1,29 @@
+class ALGORITHM:
+    SMART_MINING = 'smart_mining'
+    ETHASH = 'ethash'
+    KAWPOW = 'kawpow'
+    MEOWPOW = 'meowpow'
+    QUAIPOW = 'quaipow'
+    BLAKE3 = 'blake3'
+    AUTOLYKOS_V2 = 'autolykos_v2'
+    WORKFLOW = 'workflow'
+
+
+def is_valid_algorithm(algo: str) -> bool:
+    if algo == ALGORITHM.SMART_MINING:
+        return True
+    elif algo == ALGORITHM.ETHASH:
+        return True
+    elif algo == ALGORITHM.KAWPOW:
+        return True
+    elif algo == ALGORITHM.MEOWPOW:
+        return True
+    elif algo == ALGORITHM.QUAIPOW:
+        return True
+    elif algo == ALGORITHM.BLAKE3:
+        return True
+    elif algo == ALGORITHM.AUTOLYKOS_V2:
+        return True
+    elif algo == ALGORITHM.WORKFLOW:
+        return True
+    return False
