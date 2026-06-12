@@ -1,0 +1,29 @@
+name: test_workflow
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install requirements
+        run: pip install -r requirements.txt
+
+      - name: Start stratum workflow server
+        run: |
+          python main.py \
+            --algo workflow \
+            --workflow-file workflow.example.json \
+            --workflow-name workflow_sample_1 \
+            --port 7878 &
+
+      - name: Run workflow client test
+        run: python scripts/test_workflow_client.py

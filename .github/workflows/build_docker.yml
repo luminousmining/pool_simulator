@@ -1,0 +1,27 @@
+name: build_docker
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Image version (e.g. 1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t pool-simulator:${{ inputs.version }} .
+
+      - name: Save image as tar
+        run: docker save pool-simulator:${{ inputs.version }} -o pool-simulator-${{ inputs.version }}.tar
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pool-simulator-${{ inputs.version }}
+          path: pool-simulator-${{ inputs.version }}.tar
