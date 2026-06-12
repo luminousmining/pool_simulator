@@ -1,5 +1,6 @@
 import json
 import logging
+import socket
 import threading
 
 from stratums import Stratum
@@ -20,23 +21,23 @@ class StratumWorkflow(Stratum):
         self.__steps = data[workflow_name]['steps']
         logging.info(f'Workflow "{workflow_name}" loaded — {len(self.__steps)} steps')
 
-    def on_connect(self, sock) -> None:
+    def on_connect(self, sock: socket.socket) -> None:
         sock_id = id(sock)
         with self.__lock:
             self.__client_step[sock_id] = 0
         self.__send_current_step(sock)
 
-    def on_disconnect(self, sock) -> None:
+    def on_disconnect(self, sock: socket.socket) -> None:
         with self.__lock:
             self.__client_step.pop(id(sock), None)
 
-    def on_message(self, sock, data: dict) -> None:
+    def on_message(self, sock: socket.socket, data: dict) -> None:
         if 'id' in data:
             self.__advance(sock)
         else:
             logging.debug(f'workflow: message without id ignored => {data}')
 
-    def __advance(self, sock) -> None:
+    def __advance(self, sock: socket.socket) -> None:
         sock_id = id(sock)
         with self.__lock:
             if sock_id not in self.__client_step:
@@ -44,7 +45,7 @@ class StratumWorkflow(Stratum):
             self.__client_step[sock_id] += 1
         self.__send_current_step(sock)
 
-    def __send_current_step(self, sock) -> None:
+    def __send_current_step(self, sock: socket.socket) -> None:
         sock_id = id(sock)
         with self.__lock:
             index = self.__client_step.get(sock_id)

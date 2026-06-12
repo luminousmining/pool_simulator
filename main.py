@@ -3,8 +3,8 @@ import argparse
 import logging
 
 
-from algorithm import is_valid_algorithm
-from pool import Pool
+from utils import is_valid_algorithm
+from core import Pool
 
 
 log_level = logging.DEBUG
