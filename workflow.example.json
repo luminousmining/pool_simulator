@@ -17,6 +17,14 @@
                     "method": "mining.set_difficulty",
                     "params": [1.0]
                 }
+            },
+            {
+                "name": "step_3",
+                "id": 3,
+                "body": {
+                    "method": "mining.set_extranonce",
+                    "params": [1.0, "abcd1234"]
+                }
             }
         ]
     }

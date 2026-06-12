@@ -106,10 +106,10 @@ class Pool:
                         if len(packet):
                             data = json.loads(packet)
                             logging.info(f'recv <= {data}')
-                            self.stratum.on_message(sock, data)
                             msg_id = data.get('id')
                             if msg_id is not None:
                                 self.stratum.stats.on_receive(sock, msg_id)
+                            self.stratum.on_message(sock, data)
             except TimeoutError:
                 pass
             except socket.timeout:

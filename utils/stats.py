@@ -18,10 +18,12 @@ class Statistics:
 
     def on_receive(self, sock: socket.socket, msg_id: int | str) -> None:
         key = (id(sock), str(msg_id))
+        now = time.perf_counter()
         with self.__lock:
-            send_time = self.__pending.pop(key, None)
-        if send_time is None:
-            return
+            send_time = self.__pending.get(key)
+            if send_time is None:
+                return
+            self.__pending[key] = now
         rtt_ms = (time.perf_counter() - send_time) * 1000
         with self.__lock:
             self.__round_trip_times.append(rtt_ms)
