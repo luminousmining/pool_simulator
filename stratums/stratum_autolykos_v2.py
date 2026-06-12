@@ -1,4 +1,5 @@
 import logging
+from typing import Union
 
 from stratums import Stratum
 
@@ -30,7 +31,7 @@ class StratumAutolykosv2(Stratum):
         else:
             logging.error(f'Unknow method [{method}][{params}]')
 
-    def __on_mining_subscribe(self, sock,  request_id: int or str):
+    def __on_mining_subscribe(self, sock,  request_id: Union[int, str]):
         extra_nonce = '996e'
         size = 6
 
@@ -45,7 +46,7 @@ class StratumAutolykosv2(Stratum):
                '}'
         self.send(sock, body)
 
-    def __on_mining_authorize(self, sock, request_id: int or str):
+    def __on_mining_authorize(self, sock, request_id: Union[int, str]):
         key_id = f'"id":{request_id}'
         if type(request_id) is str:
             key_id = f'"id":"{request_id}"'
@@ -81,7 +82,7 @@ class StratumAutolykosv2(Stratum):
                '}'
         self.send(sock, body)
 
-    def __on_mining_submit(self, sock, request_id: int or str, params: list):
+    def __on_mining_submit(self, sock, request_id: Union[int, str], params: list):
         key_id = request_id
         if type(request_id) is str:
             key_id = f'"{request_id}"'
